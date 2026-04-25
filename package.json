@@ -2,6 +2,8 @@
   "name": "fixam-api",
   "version": "1.0.0",
   "description": "FixAm API Service",
+  "engines": {
+   "node": ">=20.0.0"
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -14,3 +16,5 @@
     "express": "^4.18.0"
   }
 }
+
+{
