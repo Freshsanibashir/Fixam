@@ -5,25 +5,25 @@ const supabase = require('./supabase');
 const whatsappRoutes = require('./routes/whatsapp');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
 
-app.use('/whatsapp', whatsappRoutes);
-
+// This is the missing piece - the "Front Door"
 app.get('/', (req, res) => {
-  res.json({ service: 'FixAm API', status: 'Online' });
+  res.send('FixAm Backend is Active and Online!');
 });
+
+app.use('/whatsapp', whatsappRoutes);
 
 app.get('/health/db', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('service_categories')
       .select('*');
-    
     if (error) throw error;
-    res.json({ categories: data });
+    res.json({ status: 'Database Connected', data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
