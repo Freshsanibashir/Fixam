@@ -5,8 +5,6 @@ const supabase = require('./supabase');
 const whatsappRoutes = require('./routes/whatsapp');
 
 const app = express();
-
-// This line is critical: it MUST use the variable Railway provides
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
@@ -28,7 +26,6 @@ app.get('/health/db', async (req, res) => {
   }
 });
 
-// Bind to 0.0.0.0 so the network can find the process
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server actually listening on port ${PORT}`);
+  console.log(`🚀 Server listening on port ${PORT}`);
 });
