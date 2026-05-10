@@ -14,58 +14,57 @@ export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setMessage('');
-    
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
-
-    if (error) {
-      setMessage(error.message);
-    } else {
-      setMessage('Success! Check your email for a confirmation link.');
-    }
+    if (error) setMessage(error.message);
+    else setMessage('Check your email to verify your FixAm account!');
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] px-6">
-      <div className="max-w-md w-full bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
-        <h2 className="text-3xl font-black text-slate-900 text-center tracking-tight">Join FixAm</h2>
+    // attractive mesh gradient background
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 relative overflow-hidden px-6">
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full"></div>
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/20 blur-[120px] rounded-full"></div>
+
+      <div className="max-w-md w-full backdrop-blur-xl bg-white/5 p-10 rounded-[2.5rem] border border-white/10 shadow-2xl relative z-10">
+        <div className="text-center mb-8">
+          <h2 className="text-4xl font-black text-white tracking-tight">Join FixAm</h2>
+          <p className="text-slate-400 mt-2 font-medium">Reliable artisans at your doorstep.</p>
+        </div>
         
-        <form onSubmit={handleSignUp} className="mt-8 space-y-4">
+        <form onSubmit={handleSignUp} className="space-y-4">
           <input 
             type="email" 
-            placeholder="Work Email" 
-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition"
+            placeholder="Email Address" 
+            className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition text-white placeholder:text-slate-500"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input 
             type="password" 
             placeholder="Create Password" 
-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition"
+            className="w-full p-4 bg-white/5 border border-white/10 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition text-white placeholder:text-slate-500"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button 
             disabled={loading}
-            className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-bold shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Get Started'}
+            {loading ? 'Processing...' : 'Create Account'}
           </button>
         </form>
 
-        {message && <p className="mt-4 text-center text-sm font-bold text-blue-600">{message}</p>}
+        {message && <p className="mt-6 text-center text-sm font-bold text-blue-400 animate-pulse">{message}</p>}
         
-        <div className="mt-8 text-center">
-          <Link href="/login" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition">
-            Already have an account? Log In
-          </Link>
+        <div className="mt-8 text-center border-t border-white/5 pt-6">
+          <p className="text-slate-400 text-sm">
+            Already have an account? <Link href="/login" className="text-white font-bold hover:underline">Log In</Link>
+          </p>
         </div>
       </div>
     </div>
