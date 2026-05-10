@@ -60,7 +60,7 @@ export default function Login() {
         {error && <p className="mt-4 text-center text-sm text-red-500 font-semibold">{error}</p>}
         
         <div className="mt-8 flex flex-col items-center space-y-3">
-          <Link href="/forgot-password" size="sm" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition">Forgot Password?</Link>
+<Link href="/forgot-password" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition">Forgot Password?</Link>
           <p className="text-xs text-slate-400">New to FixAm? <Link href="/signup" className="text-blue-600 font-bold hover:underline">Create Account</Link></p>
         </div>
       </div>
