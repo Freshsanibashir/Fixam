@@ -1,3 +1,4 @@
+import './globals.css';
 export const metadata = {
   title: 'FixAm - Abuja Artisans',
   description: 'Find local help in Abuja',
