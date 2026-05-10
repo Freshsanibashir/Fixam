@@ -2,61 +2,59 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/lib/supabase';
 
-// Define the shape to stop the 'never' type error
-interface Artisan {
-  id: string;
-  full_name: string;
-  role: string;
-}
-
-export default function SearchPage() {
+export default function Search() {
   const [query, setQuery] = useState('');
-  // Explicitly typing the state as an array of Artisans
-  const [artisans, setArtisans] = useState<Artisan[]>([]);
+  const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const searchArtisans = async () => {
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Logic: Search for artisans by name or skill in your Supabase 'artisans' table
     const { data, error } = await supabase
-      .from('profiles')
+      .from('artisans')
       .select('*')
-      .eq('role', 'artisan')
-      .ilike('full_name', `%${query}%`);
+      .or(`name.ilike.%${query}%,skill.ilike.%${query}%`);
 
-    if (!error && data) {
-      // Data is cast to Artisan[] to match the state type
-      setArtisans(data as Artisan[]);
-    }
+    if (!error) setResults(data || []);
+    setLoading(false);
   };
 
   return (
-    <div className="p-4 bg-gray-50 min-h-screen">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-xl font-bold mb-4 text-black italic">FixAm Abuja</h1>
-        <input 
-          className="border p-3 w-full mb-4 text-black rounded-lg"
-          placeholder="Search for artisans..." 
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button 
-          onClick={searchArtisans}
-          className="bg-green-600 text-white p-3 w-full rounded-lg font-bold"
-        >
-          Search
-        </button>
+    <div className="min-h-screen bg-[#f8fafc] p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-black text-slate-900 mb-8">Find Professionals</h1>
+        
+        <form onSubmit={handleSearch} className="relative group">
+          <input 
+            type="text" 
+            placeholder="What service do you need? (e.g. Plumber, Electrician)" 
+            className="w-full p-6 bg-white border border-slate-200 rounded-[2rem] shadow-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all text-lg"
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="absolute right-3 top-3 bottom-3 px-8 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition">
+            {loading ? 'Searching...' : 'Search'}
+          </button>
+        </form>
 
-        <div className="mt-6 space-y-4">
-          {artisans.map((artisan) => (
-            <div key={artisan.id} className="border p-4 rounded-xl bg-white text-black shadow-sm flex justify-between items-center">
-              <div>
-                <h2 className="font-bold">{artisan.full_name}</h2>
-                <p className="text-xs text-gray-500 uppercase">{artisan.role}</p>
+        <div className="mt-12 grid gap-6">
+          {results.length > 0 ? (
+            results.map((artisan) => (
+              <div key={artisan.id} className="p-6 bg-white border border-slate-100 rounded-2xl shadow-sm flex justify-between items-center hover:shadow-md transition">
+                <div>
+                  <h3 className="font-bold text-lg text-slate-900">{artisan.name}</h3>
+                  <p className="text-blue-600 font-semibold text-sm">{artisan.skill}</p>
+                  <p className="text-slate-400 text-xs mt-1">📍 {artisan.location || 'Abuja'}</p>
+                </div>
+                <button className="px-6 py-2 bg-slate-900 text-white rounded-xl text-sm font-bold">Book Now</button>
               </div>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-                Book Now
-              </button>
-            </div>
-          ))}
+            ))
+          ) : (
+            !loading && <p className="text-center text-slate-400 mt-20 italic">No artisans found. Try searching "Electrician" or "Plumber".</p>
+          )}
         </div>
       </div>
     </div>
