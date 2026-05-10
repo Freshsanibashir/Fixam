@@ -1,16 +1,9 @@
-export const metadata = {
-  title: 'FixAm - Abuja Artisans',
-  description: 'Find local help in Abuja',
-}
+import './globals.css';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>{children}</body>
     </html>
-  )
+  );
 }
