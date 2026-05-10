@@ -11,18 +11,26 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) setMessage(error.message);
-    else setMessage('Check your email to verify your FixAm account!');
-    setLoading(false);
-  };
+const handleSignUp = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true); // <--- Add this!
+  setMessage('');   // <--- Clear old errors
+  
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { 
+      emailRedirectTo: 'https://fixam-jet.vercel.app/auth/callback' 
+    },
+  });
+
+  if (error) {
+    setMessage(error.message);
+  } else {
+    setMessage('Check your email to verify your FixAm account!');
+  }
+  setLoading(false);
+};
 
   return (
     // attractive mesh gradient background
