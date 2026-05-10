@@ -14,6 +14,7 @@ export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setMessage('');
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -26,7 +27,7 @@ export default function SignUp() {
     if (error) {
       setMessage(error.message);
     } else {
-      setMessage('Check your email for the confirmation link!');
+      setMessage('Success! Check your email for a confirmation link.');
     }
     setLoading(false);
   };
@@ -34,37 +35,38 @@ export default function SignUp() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] px-6">
       <div className="max-w-md w-full bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
-        <h2 className="text-3xl font-black text-slate-900 text-center tracking-tight">Create Account</h2>
-        <p className="text-slate-500 text-center mt-2 text-sm">Join the FixAm professional network.</p>
+        <h2 className="text-3xl font-black text-slate-900 text-center tracking-tight">Join FixAm</h2>
         
         <form onSubmit={handleSignUp} className="mt-8 space-y-4">
           <input 
             type="email" 
             placeholder="Work Email" 
-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input 
             type="password" 
-            placeholder="Password" 
-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none transition"
+            placeholder="Create Password" 
+            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button 
             disabled={loading}
-            className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-100 hover:bg-blue-700 transition-all disabled:opacity-50"
+            className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition-all disabled:opacity-50"
           >
-            {loading ? 'Processing...' : 'Get Started'}
+            {loading ? 'Creating Account...' : 'Get Started'}
           </button>
         </form>
 
-        {message && <p className="mt-4 text-center text-sm font-medium text-blue-600">{message}</p>}
+        {message && <p className="mt-4 text-center text-sm font-bold text-blue-600">{message}</p>}
         
-        <p className="mt-6 text-center text-xs text-slate-400">
-          Already have an account? <Link href="/login" className="text-blue-600 font-bold hover:underline">Log In</Link>
-        </p>
+        <div className="mt-8 text-center">
+          <Link href="/login" className="text-xs font-bold text-slate-400 hover:text-blue-600 transition">
+            Already have an account? Log In
+          </Link>
+        </div>
       </div>
     </div>
   );
